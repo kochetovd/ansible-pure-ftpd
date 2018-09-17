@@ -9,6 +9,9 @@ pure_ftpd_vusers:
   - name: ftp
     dir: "{{ pure_ftpd_root }}"
     password: "FTPisSoC00l?"
+    pureftpd_user_uid: "{{ pure_ftpd_user }}"
+    pureftpd_group_gid: "{{ pure_ftpd_group }}"
+    
 pure_ftpd_tls: true
 pure_ftpd_allow_insecure: false
 pure_ftpd_openssl_config:
