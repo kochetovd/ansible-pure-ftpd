@@ -32,6 +32,10 @@
 # Create and/or install SSL certificate
 - include: tls.yml
   when: pure_ftpd_tls
+  
+- name: Restart pure-ftpd
+  service: name=pure-ftpd state=restarted
+  when: r_linkdb.changed
 
 # Create the virtual FTP users and set their passwords
 - include: virtual-user.yml
