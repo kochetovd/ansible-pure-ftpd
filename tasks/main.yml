@@ -11,7 +11,6 @@
   when: ansible_os_family == 'RedHat'
 
 - name: Write config files
-  notify: restart pureftpd
   template:
     src: 'config.j2'
     dest: "{{ __ftp_conf_root }}"
