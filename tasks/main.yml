@@ -7,6 +7,18 @@
 - include: setup-Debian.yml
   when: ansible_os_family == 'Debian'
 
+- include: setup-RedHat.yml
+  when: ansible_os_family == 'RedHat'
+
+- name: Write config files
+  notify: restart pureftpd
+  template:
+    src: 'config.j2'
+    dest: "{{ __ftp_conf_root }}"
+    owner: root
+    group: root
+    mode: 0750
+
 # Pure-FTPd setup
 - name: Create the FTP system group '{{ pure_ftpd_group }}'
   group: name={{ pure_ftpd_group }} state=present
@@ -28,6 +40,7 @@
 - name: Link virtual FTP user database to the correct location
   file: src={{ __ftp_user_db }} dest={{ __ftp_user_db_sym }} state=link
   register: r_linkdb
+  when: ansible_os_family == 'Debian'
 
 - name: Restart pure-ftpd
   service: name=pure-ftpd state=restarted

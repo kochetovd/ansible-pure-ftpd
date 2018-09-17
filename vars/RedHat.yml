@@ -1,0 +1,5 @@
+---
+__ftp_root: "/etc/pure-ftpd"
+__ftp_passwd: "{{ __ftp_root }}/pureftpd.passwd"
+__ftp_conf_root: "{{ __ftp_root }}/pure-ftpd.conf"
+__ftp_user_db: "{{ __ftp_conf_root }}/pureftpd.pdb"
