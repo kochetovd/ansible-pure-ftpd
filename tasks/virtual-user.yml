@@ -1,6 +1,6 @@
 ---
 - name: Create directory {{ item.dir | default( pure_ftpd_root ) }} for virtual FTP user {{ item.name }}
-  file: dest={{ item.dir | default( pure_ftpd_root ) }} mode=0755 state=directory owner={{ pure_ftpd_user }} group={{ pure_ftpd_group}}
+  file: dest={{ item.dir | default( pure_ftpd_root ) }} mode=0755 state=directory owner={{ item.pure_ftpd_user | default(pure_ftpd_user) }} group={{ item.pure_ftpd_group | default(pure_ftpd_group) }}
 
 - name: Check if pure-pw passwords file exists
   stat: path={{ __ftp_passwd }}
@@ -15,14 +15,14 @@
 
 - name: Create virtual FTP user {{ item.name }}
   expect:
-    command: pure-pw useradd {{ item.name }} -u {{ pure_ftpd_user }} -g {{ pure_ftpd_group }} -d {{ item.dir | default( pure_ftpd_root ) }} -m
+    command: pure-pw useradd {{ item.name }} -u {{ item.pure_ftpd_user | default(pure_ftpd_user) }} -g {{ item.pure_ftpd_group | default(pure_ftpd_group) }} -d {{ item.dir | default( pure_ftpd_root ) }} -m
     responses:
       (?i)password: "{{ item.password }}"
       (?i)enter it again: "{{ item.password }}"
   when: (r_userexists|failed) or (not r_passwd.stat.exists)
 
 - name: Update virtual FTP user {{ item.name }}
-  command: pure-pw usermod {{ item.name }} -u {{ pure_ftpd_user }} -g {{ pure_ftpd_group }} -d {{ item.dir | default( pure_ftpd_root ) }} -m
+  command: pure-pw usermod {{ item.name }} -u {{ item.pure_ftpd_user | default(pure_ftpd_user) }} -g {{ item.pure_ftpd_group | default(pure_ftpd_group) }} -d {{ item.dir | default( pure_ftpd_root ) }} -m
   when: r_userexists|success
 
 - name: Update virtual FTP user {{ item.name }} password
